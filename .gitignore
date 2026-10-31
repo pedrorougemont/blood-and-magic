@@ -6,6 +6,7 @@
 
 # Logs and environment
 node_modules/
+.wrangler/
 .DS_Store
 *.log
 .gemini/

@@ -70,6 +70,20 @@ class BamGameApp {
     this.dragCurrPx = [0, 0];
     this.isDraggingMinimap = false;
 
+    // Touch interaction state (mobile & tablet gestures)
+    this.touchStartTime = 0;
+    this.touchStartPx = [0, 0];
+    this.touchStartClient = [0, 0];
+    this.lastTouchTapTime = 0;
+    this.lastTouchTapPos = [0, 0];
+    this.longPressTimer = null;
+    this.isLongPressTriggered = false;
+    this.isTwoFinger = false;
+    this.twoFingerStartClient = [0, 0];
+    this.twoFingerTouchLogical = [0, 0];
+    this.twoFingerStartTime = 0;
+    this.initialCameraView = [0, 0];
+
     this.keysDown = new Set();
     this.lastScrollTime = 0;
     this.lastSimTime = performance.now();
@@ -236,6 +250,185 @@ class BamGameApp {
       this.pressedBtnId = null;
     });
 
+    // Touch event listeners for mobile, tablets, and touchscreens:
+    // - Long-Press (~350ms): Right-Click (Move/Attack/Obelisk/Cancel)
+    // - Double-Tap: Right-Click (Fast Move/Attack)
+    // - Two-Finger Tap: Right-Click
+    // - Two-Finger Drag: Smooth map camera panning
+    // - One-Finger Drag: Drag-box fence select
+    // - Single-Tap: Normal selection / left-click
+    const getTouchCoords = (touch) => {
+      const rect = this.canvas.getBoundingClientRect();
+      const x = Math.max(0, Math.min(SCREEN_W - 1, Math.floor(((touch.clientX - rect.left) / rect.width) * SCREEN_W)));
+      const y = Math.max(0, Math.min(SCREEN_H - 1, Math.floor(((touch.clientY - rect.top) / rect.height) * SCREEN_H)));
+      return [x, y];
+    };
+
+    this.canvas.addEventListener('touchstart', (e) => {
+      e.preventDefault();
+      this.sfx.unlock();
+
+      if (e.touches.length === 2) {
+        if (this.longPressTimer) {
+          clearTimeout(this.longPressTimer);
+          this.longPressTimer = null;
+        }
+        this.isTwoFinger = true;
+        this.isDraggingViewport = false;
+        const t1 = e.touches[0];
+        const t2 = e.touches[1];
+        this.twoFingerStartClient = [(t1.clientX + t2.clientX) / 2, (t1.clientY + t2.clientY) / 2];
+        this.twoFingerStartTime = Date.now();
+        this.initialCameraView = [this.world.viewX, this.world.viewY];
+        this.twoFingerTouchLogical = getTouchCoords(t1);
+        return;
+      }
+
+      if (e.touches.length !== 1) return;
+
+      const touch = e.touches[0];
+      const [mx, my] = getTouchCoords(touch);
+      this.mouseX = mx;
+      this.mouseY = my;
+      this.mouseInside = true;
+      this.touchStartTime = Date.now();
+      this.touchStartPx = [mx, my];
+      this.touchStartClient = [touch.clientX, touch.clientY];
+      this.isLongPressTriggered = false;
+
+      // Start long-press timer (~350ms) -> Triggers RMB Click!
+      if (this.longPressTimer) clearTimeout(this.longPressTimer);
+      this.longPressTimer = setTimeout(() => {
+        this.isLongPressTriggered = true;
+        this.longPressTimer = null;
+        if (navigator.vibrate) {
+          try { navigator.vibrate(35); } catch {}
+        }
+        this.handleRightClick(mx, my);
+      }, 350);
+
+      if (mx < VPORT_PIX_W && my < VPORT_PIX_H) {
+        this.dragStartPx = [mx, my];
+        this.dragCurrPx = [mx, my];
+      }
+    }, { passive: false });
+
+    this.canvas.addEventListener('touchmove', (e) => {
+      e.preventDefault();
+
+      if (this.isTwoFinger && e.touches.length >= 2) {
+        const t1 = e.touches[0];
+        const t2 = e.touches[1];
+        const curMidX = (t1.clientX + t2.clientX) / 2;
+        const curMidY = (t1.clientY + t2.clientY) / 2;
+        const rect = this.canvas.getBoundingClientRect();
+        const deltaTileX = Math.round(((curMidX - this.twoFingerStartClient[0]) / rect.width) * (SCREEN_W / TILE_W));
+        const deltaTileY = Math.round(((curMidY - this.twoFingerStartClient[1]) / rect.height) * (SCREEN_H / TILE_H));
+
+        this.world.viewX = Math.max(-1, Math.min(WORLD_W - 11, this.initialCameraView[0] - deltaTileX));
+        this.world.viewY = Math.max(-1, Math.min(WORLD_H - 7, this.initialCameraView[1] - deltaTileY));
+        return;
+      }
+
+      if (e.touches.length !== 1) return;
+
+      const touch = e.touches[0];
+      const [mx, my] = getTouchCoords(touch);
+      this.mouseX = mx;
+      this.mouseY = my;
+
+      const distClient = Math.hypot(touch.clientX - this.touchStartClient[0], touch.clientY - this.touchStartClient[1]);
+      if (distClient > 10) {
+        if (this.longPressTimer) {
+          clearTimeout(this.longPressTimer);
+          this.longPressTimer = null;
+        }
+
+        if (!this.isLongPressTriggered) {
+          if (this.inRect(mx, my, MINIMAP_RECT)) {
+            this.jumpCameraFromMinimap(mx, my);
+          } else if (this.touchStartPx[0] < VPORT_PIX_W && this.touchStartPx[1] < VPORT_PIX_H) {
+            this.isDraggingViewport = true;
+            this.dragCurrPx = [
+              Math.min(VPORT_PIX_W - 1, Math.max(0, mx)),
+              Math.min(VPORT_PIX_H - 1, Math.max(0, my)),
+            ];
+          }
+        }
+      }
+    }, { passive: false });
+
+    this.canvas.addEventListener('touchend', (e) => {
+      e.preventDefault();
+
+      if (this.longPressTimer) {
+        clearTimeout(this.longPressTimer);
+        this.longPressTimer = null;
+      }
+
+      if (this.isTwoFinger) {
+        const touchDuration = Date.now() - (this.twoFingerStartTime || 0);
+        if (touchDuration < 280) {
+          if (navigator.vibrate) {
+            try { navigator.vibrate(25); } catch {}
+          }
+          this.handleRightClick(this.twoFingerTouchLogical[0], this.twoFingerTouchLogical[1]);
+        }
+        this.isTwoFinger = false;
+        return;
+      }
+
+      if (this.isLongPressTriggered) {
+        this.isLongPressTriggered = false;
+        this.isDraggingViewport = false;
+        return;
+      }
+
+      const [sx, sy] = this.touchStartPx;
+      const [mx, my] = [this.mouseX, this.mouseY];
+      const dist = Math.hypot(mx - sx, my - sy);
+
+      if (this.isDraggingViewport && dist >= 10) {
+        this.isDraggingViewport = false;
+        this.handleViewportFenceSelect(sx, sy, Math.min(VPORT_PIX_W - 1, mx), Math.min(VPORT_PIX_H - 1, my));
+        return;
+      }
+      this.isDraggingViewport = false;
+
+      // Handle Tap / Double-Tap (< 10px movement)
+      if (dist < 10) {
+        const now = Date.now();
+        const tapDist = Math.hypot(mx - this.lastTouchTapPos[0], my - this.lastTouchTapPos[1]);
+
+        // Double-Tap in Viewport -> RMB Click!
+        if (
+          now - this.lastTouchTapTime < 350 &&
+          tapDist < 16 &&
+          mx < VPORT_PIX_W &&
+          my < VPORT_PIX_H
+        ) {
+          this.lastTouchTapTime = 0;
+          if (navigator.vibrate) {
+            try { navigator.vibrate(25); } catch {}
+          }
+          this.handleRightClick(mx, my);
+          return;
+        }
+
+        this.lastTouchTapTime = now;
+        this.lastTouchTapPos = [mx, my];
+
+        // Single Tap
+        if (mx < VPORT_PIX_W && my < VPORT_PIX_H) {
+          this.handleViewportLeftClick(mx, my);
+        } else if (this.inRect(mx, my, MINIMAP_RECT)) {
+          this.jumpCameraFromMinimap(mx, my);
+        } else {
+          this.handleHudMouseDown(mx, my);
+        }
+      }
+    }, { passive: false });
+
     // Keyboard shortcuts
     window.addEventListener('keydown', (e) => {
       if (e.target && (e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT')) return;
@@ -301,11 +494,6 @@ class BamGameApp {
       this.sfx.enabled = !this.sfx.enabled;
       btnAudio.textContent = `SFX: ${this.sfx.enabled ? 'ON' : 'OFF'}`;
       btnAudio.classList.toggle('active', this.sfx.enabled);
-    });
-
-    const guidePanel = document.getElementById('guidePanel');
-    document.getElementById('btnHelp')?.addEventListener('click', () => {
-      guidePanel?.classList.toggle('hidden');
     });
 
     document.getElementById('btnPlayAgain')?.addEventListener('click', () => {
@@ -596,8 +784,11 @@ class BamGameApp {
       }
       this.world.addMessage(`SOUND EFFECTS: ${this.sfx.enabled ? 'ON' : 'OFF'}`);
     } else if (id === 'ENCYCLO') {
-      const guidePanel = document.getElementById('guidePanel');
-      guidePanel?.classList.toggle('hidden');
+      const msg =
+        this.world.mapId === 9110
+          ? 'HOWL OF VENGEANCE: STAGE 1 — HORATH\'S CRYPT'
+          : 'HOWL OF VENGEANCE: STAGE 1 — OLD STONE KEEP';
+      this.world.addMessage(msg);
     }
   }
 

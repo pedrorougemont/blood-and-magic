@@ -25,7 +25,6 @@
       <button id="btnFog" class="tb-btn active" title="Toggle Fog of War (F)">Fog: ON</button>
       <button id="btnBoost" class="tb-btn" title="Grant +100 Mana &amp; +250 XP for testing">+Mana/XP</button>
       <button id="btnAudio" class="tb-btn active" title="Toggle Sound Effects">SFX: ON</button>
-      <button id="btnHelp" class="tb-btn" title="Toggle Quick Field Guide">Guide</button>
     </div>
   </header>
 
@@ -51,38 +50,6 @@
         </div>
       </div>
     </div>
-
-    <aside class="guide-panel" id="guidePanel">
-      <h3>Tactical Field Guide</h3>
-      <div class="guide-section">
-        <h4>Objective</h4>
-        <p id="guideObjective">Destroy the enemy <strong>Crypt</strong> (Map 9110) or enemy <strong>Barracks</strong> (Map 9155) while defending your <strong>Keep</strong>.</p>
-      </div>
-      <div class="guide-section">
-        <h4>Mouse &amp; Keyboard Controls</h4>
-        <ul>
-          <li><strong>Left-Click</strong>: Select unit, building, or terrain; or confirm active command target.</li>
-          <li><strong>Left-Drag</strong>: Box-select a group of friendly units.</li>
-          <li><strong>Right-Click</strong>: <em>Obvious Verb</em> — Move selected unit(s) to tile, Attack enemy unit/building, toggle Obelisk on self, or Summon at Portal.</li>
-          <li><strong>Minimap Click/Drag</strong>: Jump camera to map location.</li>
-          <li><strong>Arrow Keys / WASD</strong>: Scroll camera across the 32×40 map.</li>
-          <li><strong>Hotkeys</strong>: <kbd>M</kbd> Move, <kbd>A</kbd> Attack, <kbd>G</kbd> Guard/Obelisk, <kbd>S</kbd> Skill/Transfer, <kbd>T</kbd> Transform/Summon, <kbd>D</kbd> Disband, <kbd>P</kbd> Pause, <kbd>F</kbd> Fog.</li>
-        </ul>
-      </div>
-      <div class="guide-section">
-        <h4>Blood &amp; Magic Mechanics</h4>
-        <ul>
-          <li><strong>Basal Golems &amp; Obelisks</strong>: Press <strong>Guard</strong> (<kbd>G</kbd>) or right-click a Basal Golem to turn it into an <strong>Obelisk</strong>. Obelisks generate Mana over time. Click <strong>Transfer</strong> (<kbd>S</kbd>) to send stored mana to your pool (or let it auto-transfer when full).</li>
-          <li><strong>Summoning</strong>: Select your glowing <strong>Portal</strong> and click <strong>Basal Golem (40 mana)</strong> (<kbd>T</kbd>) to summon a new Basal Golem.</li>
-          <li><strong>Transforming Creatures</strong>: Move a Basal Golem next to your <strong>Barracks</strong> or <strong>Crypt</strong>, click <strong>Transform</strong> (<kbd>T</kbd>), and pick a creature icon (e.g., <em>Warrior, Ranger, Paladin, Zombie, Gargoyle, Ghoul, Wraith</em>). It forms a <strong>Metapod</strong> and hatches!</li>
-          <li><strong>Research (XP)</strong>: Earn XP from combat &amp; building. Click the top-right <strong>RESEARCH</strong> book or a grayed-out creature icon to unlock higher-tier creatures.</li>
-          <li><strong>2×2 Foundations</strong>: Place 4 Basal Golems in Obelisk mode on all 4 tiles of a stone <strong>Foundation</strong>, then click <strong>Transform</strong> (<kbd>T</kbd>) to erect a new Arbor Lodge, Barracks, Crypt, Runestone, or Temple!</li>
-        </ul>
-      </div>
-      <div class="guide-footer">
-        <span id="cfStatus">Cloudflare Worker / DO Ready</span>
-      </div>
-    </aside>
   </main>
 
   <script type="module" src="/game.js"></script>
