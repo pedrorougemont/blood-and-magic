@@ -41,3 +41,4 @@ head_orig.save(
 head_orig.save(os.path.join(ARTIFACT_DIR, 'archer_head_helmet_toggle.gif'), save_all=True, append_images=[head_helm], duration=800, loop=0)
 
 print("Saved animated comparison GIFs (full body and head close-up).")
+

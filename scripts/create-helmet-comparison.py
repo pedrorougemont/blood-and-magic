@@ -228,3 +228,4 @@ img_helm_a.save('public/assets/spritesheets/archer_walk_down_helmet.png')
 img_helm_b.save('public/assets/spritesheets/archer_walk_down_helmet_variant.png')
 
 print("Saved native 1x sprites.")
+

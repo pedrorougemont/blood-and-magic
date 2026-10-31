@@ -204,3 +204,4 @@ print(f"Saved {comp_out_path} ({CANVAS_W}x{CANVAS_H} px)")
 artifact_comp_path = os.path.join(ARTIFACT_DIR, 'archer_helmet_before_after.png')
 comp.save(artifact_comp_path)
 print(f"Saved {artifact_comp_path}")
+
