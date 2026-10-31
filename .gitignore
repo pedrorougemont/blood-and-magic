@@ -1,0 +1,11 @@
+# Blood & Magic Web Prototype .gitignore
+
+# Original 1996 DOS C++ source directories (excluded per user request)
+/SRC/
+/TIGRE/
+
+# Logs and environment
+node_modules/
+.DS_Store
+*.log
+.gemini/

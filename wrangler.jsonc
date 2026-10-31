@@ -1,0 +1,24 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "blood-and-magic-prototype",
+  "main": "src/worker.js",
+  "compatibility_date": "2025-02-01",
+  "assets": {
+    "directory": "./public",
+    "binding": "ASSETS"
+  },
+  "durable_objects": {
+    "bindings": [
+      {
+        "name": "BAM_GAME_ROOM",
+        "class_name": "BamGameRoom"
+      }
+    ]
+  },
+  "migrations": [
+    {
+      "tag": "v1",
+      "new_sqlite_classes": ["BamGameRoom"]
+    }
+  ]
+}

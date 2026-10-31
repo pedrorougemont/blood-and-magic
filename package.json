@@ -1,0 +1,13 @@
+{
+  "name": "blood-and-magic-web",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Browser-native port prototype of Blood & Magic (1996, Tachyon/Interplay) for Cloudflare Workers & Durable Objects",
+  "scripts": {
+    "extract": "node scripts/extract-assets.mjs",
+    "dev": "node scripts/dev-server.mjs",
+    "cf:dev": "npx wrangler dev",
+    "cf:deploy": "npx wrangler deploy"
+  }
+}

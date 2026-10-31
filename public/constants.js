@@ -1,0 +1,438 @@
+// Constants, Enums, Fog Tables, and HUD Layout from Blood & Magic C++ Source (SRC/ALLDEFS.HPP, WORLD.CPP, VIEWPORT.CPP)
+
+export const WORLD_W = 32;
+export const WORLD_H = 40;
+export const TICKS_PER_SEC = 20;
+
+// Sides (SRC/ALLDEFS.HPP)
+export const SIDE3 = 0x00; // Wild animals / hates everyone
+export const SIDE0 = 0x01; // Neutral (peasants, foundations)
+export const SIDE1 = 0x02; // Player 1 (Blue in Storyline 1)
+export const SIDE2 = 0x04; // Player 2 / Computer (Red in Storyline 1)
+
+// Fog of war flags (SRC/VIEWPORT.HPP)
+export const FOG_NULL = 0x00;
+export const FOG_SOUTH = 0x01;
+export const FOG_EAST = 0x02;
+export const FOG_NORTH = 0x04;
+export const FOG_WEST = 0x08;
+export const FOG_ALL = 0x0f;
+export const FOG_CENTER = 0x10;
+export const FOG_FRESH = 0x20;
+
+// Exact fog border cel table from ViewPort::ViewPort() in SRC/VIEWPORT.CPP lines 3343-3354
+export const FOG_ANIM_TABLE = {
+  [FOG_WEST]: [308, 1],
+  [FOG_NORTH]: [308, 2],
+  [FOG_WEST | FOG_SOUTH]: [308, 3],
+  [FOG_NORTH | FOG_WEST | FOG_SOUTH]: [308, 4],
+  [FOG_WEST | FOG_NORTH | FOG_EAST]: [308, 5],
+  [FOG_EAST]: [309, 1],
+  [FOG_SOUTH]: [309, 2],
+  [FOG_SOUTH | FOG_EAST]: [309, 3],
+  [FOG_WEST | FOG_NORTH]: [309, 4],
+  [FOG_EAST | FOG_NORTH]: [309, 5],
+  [FOG_NORTH | FOG_EAST | FOG_SOUTH]: [309, 6],
+  [FOG_WEST | FOG_SOUTH | FOG_EAST]: [309, 7],
+};
+
+// Directions (SRC/UNITS.HPP)
+export const DIR = {
+  DOWN: 0,
+  DOWN_RIGHT: 1,
+  RIGHT: 2,
+  UP_RIGHT: 3,
+  UP: 4,
+  UP_LEFT: 5,
+  LEFT: 6,
+  DOWN_LEFT: 7,
+};
+
+export const DIR_DELTAS = [
+  [0, 1],   // DOWN
+  [1, 1],   // DOWN_RIGHT
+  [1, 0],   // RIGHT
+  [1, -1],  // UP_RIGHT
+  [0, -1],  // UP
+  [-1, -1], // UP_LEFT
+  [-1, 0],  // LEFT
+  [-1, 1],  // DOWN_LEFT
+];
+
+// Animation offsets relative to unit baseAnim (SRC/UNITS.HPP)
+export const ANIM_OFF = {
+  WALK: 0,
+  ATTACK: 10,
+  GUARD: 20,
+  IS_HIT: 25,
+  DIES: 30,
+  STONED: 31,
+  PROJECTILE: 32,
+  TO_OBELISK: 34,
+  IMPACT: 38,
+  ATTACK2: 40,
+};
+
+// Fixed Animation Resource IDs
+export const ANIM_RES = {
+  RESEARCH_BAR: 98,
+  HUD_FRAME: 100,
+  RESEARCH_BTN: 101,
+  MINIMAP_ICONS: 102,
+  PORTRAIT_BLANK: 104,
+  ITEM_FRAME: 106,
+  BTN_TRANSFORM: 107,
+  BTN_SKILL: 108,
+  BTN_MOVE: 109,
+  BTN_ATTACK: 110,
+  BTN_GUARD: 111,
+  BTN_GOSEE: 112,
+  BTN_DROP: 115,
+  HUD_COVERS: 116,
+  BTN_DISBAND: 122,
+  BTN_WINLOSE: 124,
+  BTN_QUESTION: 125,
+  BTN_FREEZE: 126,
+  BTN_SEND: 127,
+  BTN_ENCYCLO: 128,
+  BTN_SETTINGS: 129,
+  GAUGE_HP: 132,
+  GAUGE_ATT: 133,
+  GAUGE_DEF: 134,
+  GAUGE_MOV: 135,
+  BTN_EXIT_MENU: 140,
+  BTN_ACOLYTE_SKILL: 142,
+  COLLAPSE: 302,
+  FIRE: 304,
+  PORTAL: 322,
+  SPARKY_POOF: 334,
+  ENCHANTMENT: 338,
+  METAPOD: 342,
+  METAPOD_HIT: 343,
+  METAPOD_DIES: 344,
+  TRANSFORM_POOF: 358,
+  HEAL_REPAIR: 360,
+  WAILED: 362,
+  STONED_FX: 364,
+  OBELISK_HIT: 378,
+  OBELISK_DIES: 380,
+  CONFIRM_MOVE: 382,
+  DISBAND_FX: 386,
+  TELEPORT_FX: 388,
+  STRUCTURE_HIT: 392,
+  MANA_TRANSFER: 398,
+  MANA_RECEIVE: 400,
+  EXPLODE: 1840,
+  CURSOR: 9000,
+  VP_CURSOR: 9002,
+  BANNER: 9004,
+};
+
+// Cursor Cels in RES_ANIM 9000
+export const CURSOR_CEL = {
+  HAND: 1,
+  UP: 2,
+  UP_RIGHT: 3,
+  RIGHT: 4,
+  DOWN_RIGHT: 5,
+  DOWN: 6,
+  DOWN_LEFT: 7,
+  LEFT: 8,
+  UP_LEFT: 9,
+  MOVE: 10,
+  ATTACK: 11,
+  ERROR: 12,
+  QUESTION: 13,
+  SKILL: 14,
+  WAIT: 16,
+};
+
+// Unit Types (1-indexed matching #UNITLIB and SQUIB 1120)
+export const UNIT_TYPE = {
+  NOUNIT: 0,
+  ACOLYTE: 1,      // BASAL GOLEM
+  BANSHEE: 2,
+  BRIGAND: 3,
+  CLERIC: 4,
+  DRUID: 5,
+  ENCHANTER: 6,
+  FURY: 7,
+  GARGOYLE: 8,
+  GHOUL: 9,
+  GNOME: 10,
+  GOBLIN: 11,
+  GOLEM: 12,       // STONE GOLEM
+  GORGON: 13,
+  GRIFFIN: 14,
+  GUARDIAN: 15,
+  HARPY: 16,
+  JUGGERNAUT: 17,
+  NYMPH: 18,
+  OBELISK: 19,
+  PALADIN: 20,
+  PEASANT: 21,
+  RANGER: 22,
+  ROC: 23,
+  ROC_EGG: 24,
+  TORTOISE: 25,
+  TROLL: 26,
+  WARRIOR: 27,
+  WIZARD: 28,
+  WOLF: 29,
+  WRAITH: 30,
+  WYRM: 31,
+  ZOMBIE: 32,
+  WEIRD_WARD: 33,
+};
+
+// Building / Cluster Function Types (SRC/ALLDEFS.HPP)
+export const FUNC = {
+  MISC: 0,
+  ARBORLODGE: 1,
+  BARRACKS: 2,
+  CRYPT: 3,
+  RUNESTONE: 4,
+  TEMPLE: 5,
+  FLAMESPOUT: 6,
+  MINESHAFT: 7,
+  PORTAL: 8,
+  WHIRLPOOL: 9,
+  HOME: 10,
+  ARBOR_FOUND: 11,
+  BARRACKS_FOUND: 12,
+  CRYPT_FOUND: 13,
+  RUNE_FOUND: 14,
+  TEMPLE_FOUND: 15,
+  KEEP: 16,
+  AQUEDUCT: 17,
+  GATE: 18,
+  CAMP: 19,
+  CAULDRON: 20,
+  SWTRIP: 21,
+  SWPRESSURE: 22,
+  IMM_GATE: 23,
+  IMM_WELL: 24,
+  GEN_FOUND: 25,
+  BANISH_STONE: 26,
+  PRISON_PIT: 27,
+};
+
+export const HP_PER_TILE = {
+  [FUNC.MISC]: 40,
+  [FUNC.ARBORLODGE]: 60,
+  [FUNC.BARRACKS]: 90,
+  [FUNC.CRYPT]: 75,
+  [FUNC.RUNESTONE]: 75,
+  [FUNC.TEMPLE]: 60,
+  [FUNC.HOME]: 40,
+  [FUNC.KEEP]: 111,
+  [FUNC.GATE]: 90,
+  [FUNC.AQUEDUCT]: 75,
+};
+
+// Terrain Enum (SRC/ALLDEFS.HPP)
+export const TERRAIN = {
+  UNDEFINED: 0,
+  BRAMBLES: 1,
+  CHASM: 2,
+  FLAME_SPOUT: 3,
+  FOLIAGE: 4,
+  ROUGH_LAND: 5,
+  HOTBED: 6,
+  MARSH: 7,
+  MINE: 8,
+  BROKEN_LAND: 9,
+  ROAD: 10,
+  OPEN_LAND: 11,
+  PORTAL: 12,
+  RUINS: 13,
+  SWAMP: 14,
+  WATER: 15,
+  WHIRLPOOL: 16,
+  HIGH_FOLIAGE: 17,
+  OBSTRUCTION: 18,
+  FOG_TERR: 19,
+  ROC_NEST: 20,
+  ARBOR_LODGE: 30,
+  BARRACKS: 31,
+  CAMP: 32,
+  CRYPT: 33,
+  GATE: 34,
+  KEEP: 35,
+  RUNESTONE: 36,
+  TEMPLE: 37,
+  STRUCTURE: 38,
+  WALL: 39,
+  MONUMENT: 40,
+  BRIDGE: 41,
+  STOCKPILE: 42,
+  GREAT_WALL: 43,
+  FOUND_ARBORLODGE: 44,
+  FOUND_BARRACKS: 45,
+  FOUND_CRYPT: 46,
+  FOUND_RUNESTONE: 47,
+  FOUND_TEMPLE: 48,
+  CAULDRON: 49,
+  ATLANTEAN_RUIN: 50,
+  AQUEDUCT: 51,
+  TRIP_SWITCH: 55,
+  PRESSURE_PLATE: 56,
+  WIND_WALL: 57,
+  GUARDIAN_PORTAL: 58,
+  GOLEM_PORTAL: 59,
+  TURRET: 60,
+  TURRET15: 75,
+  PALADIN_PORTAL: 76,
+  WARRIOR_PORTAL: 77,
+  WELL_OF_IMMORTALS: 78,
+  PLATFORM: 79,
+  FOUND_GENERIC: 80,
+  BRIDGE2: 81,
+};
+
+// Building -> Related Unit Types (MapSpace::GetRelatedUnitType in SRC/MAPS.CPP)
+export const BUILDING_UNITS = {
+  [FUNC.TEMPLE]: [UNIT_TYPE.CLERIC, UNIT_TYPE.FURY, UNIT_TYPE.PALADIN],
+  [FUNC.ARBORLODGE]: [UNIT_TYPE.DRUID, UNIT_TYPE.RANGER, UNIT_TYPE.GRIFFIN, UNIT_TYPE.NYMPH],
+  [FUNC.CRYPT]: [UNIT_TYPE.ZOMBIE, UNIT_TYPE.GARGOYLE, UNIT_TYPE.GHOUL, UNIT_TYPE.WRAITH],
+  [FUNC.RUNESTONE]: [UNIT_TYPE.WIZARD, UNIT_TYPE.GNOME, UNIT_TYPE.GOLEM, UNIT_TYPE.WYRM],
+  [FUNC.BARRACKS]: [UNIT_TYPE.WARRIOR, UNIT_TYPE.RANGER, UNIT_TYPE.PALADIN],
+  [FUNC.PORTAL]: [UNIT_TYPE.ACOLYTE],
+};
+
+// Foundation -> Building Transform Icons (acolyteBldgAnis in SRC/WORLD.CPP)
+export const FOUNDATION_BLDG_OPTIONS = [
+  { func: FUNC.ARBORLODGE, anim: 2700, name: 'ARBOR LODGE', swapIdx: 1 },
+  { func: FUNC.BARRACKS, anim: 2702, name: 'BARRACKS', swapIdx: 2 },
+  { func: FUNC.CRYPT, anim: 2708, name: 'CRYPT', swapIdx: 3 },
+  { func: FUNC.RUNESTONE, anim: 2716, name: 'RUNESTONE', swapIdx: 4 },
+  { func: FUNC.TEMPLE, anim: 2718, name: 'TEMPLE', swapIdx: 5 },
+];
+
+// Mana & XP Constants (SRC/WORLD.HPP)
+export const MANA = {
+  SUMMON: 40,
+  MEDITATE: 1,
+  ACOLYTE_MAX: 20,
+  TRANSFORM: 20,
+  DISBAND: 20,
+  BUILD_SITE: 0,
+  MAX: 300,
+};
+
+// Sound Resource IDs (SRC/ALLDEFS.HPP)
+export const SND = {
+  HEAL_REPAIR: 7200,
+  BELL_TOLL: 7202,
+  GET_ITEM: 7206,
+  DEATH_SQUEAL: 7208,
+  CRASH: 7210,
+  DEATH_FIRE: 7212,
+  DROWNING: 7214,
+  DEATH_FEMALE1: 7216,
+  TRUMPET: 7218,
+  DEATH_MALE: 7220,
+  DEATH_UNDEAD: 7222,
+  SUMMON: 7226,
+  TRANSFORM: 7226,
+  ROAR: 7228,
+  DROP_ITEM: 7230,
+  WATER_SPLASH: 7234,
+  DRUMS: 7236,
+  FLAME_SPURT: 7238,
+  SHATTER: 7240,
+  WATERFALL: 7242,
+  DISBAND: 7244,
+  FEMALE_WAIL: 7246,
+  CRUMBLE: 7248,
+  FEMALE_SONG: 7250,
+  CACKLE: 7252,
+  BIRD_CRY: 7254,
+  WHACK: 7256,
+  SCRAPE: 7258,
+  SWORD_CLASH: 7260,
+  ZAP: 7262,
+  DEATH_FEMALE2: 7264,
+  GIGGLE: 7266,
+  ERROR: 7268,
+  GUST_O_WIND: 7270,
+  BOW_TWANG: 7272,
+  SPEAR_CHUCK: 7274,
+  TRIPSWITCH: 7276,
+  PRESSUREPLATE: 7278,
+  BRIDGE_OPEN_CLOSE: 7280,
+  MAGICAL_ENERGY: 7286,
+  DEMONIC_WAIL: 7294,
+  TREE_FALLS: 7296,
+  MONSTROUS_FEMALE_SCREAM: 7298,
+  MASCULINE_SCREAM: 7300,
+  BESTIAL_ROAR: 7302,
+  METALLIC_ROAR: 7306,
+  HISSING_SHOT: 7308,
+  COLLAPSING_STONES: 7310,
+  AVIAN_ROAR: 7312,
+  CHOPPING_STRIKE: 7314,
+  WOODEN_SMACK: 7318,
+  METALLIC_STRIKE: 7320,
+  HERALD_TRUMPET: 7322,
+  METAPOD_START: 7324,
+};
+
+// Unit Selection Response Sounds (SRC/ALLDEFS.HPP)
+export const UNIT_SELECT_SND = {
+  [UNIT_TYPE.ACOLYTE]: 7450,
+  [UNIT_TYPE.GOBLIN]: 7451,
+  [UNIT_TYPE.CLERIC]: 7452,
+  [UNIT_TYPE.PEASANT]: 7453,
+  [UNIT_TYPE.FURY]: 7454,
+  [UNIT_TYPE.GOLEM]: 7455,
+  [UNIT_TYPE.PALADIN]: 7456,
+  [UNIT_TYPE.RANGER]: 7457,
+  [UNIT_TYPE.TROLL]: 7458,
+  [UNIT_TYPE.WARRIOR]: 7459,
+  [UNIT_TYPE.DRUID]: 7471,
+  [UNIT_TYPE.GARGOYLE]: 7472,
+  [UNIT_TYPE.GHOUL]: 7473,
+  [UNIT_TYPE.GNOME]: 7474,
+  [UNIT_TYPE.GORGON]: 7475,
+  [UNIT_TYPE.GRIFFIN]: 7476,
+  [UNIT_TYPE.JUGGERNAUT]: 7477,
+  [UNIT_TYPE.NYMPH]: 7478,
+  [UNIT_TYPE.WIZARD]: 7480,
+  [UNIT_TYPE.WOLF]: 7481,
+  [UNIT_TYPE.WRAITH]: 7482,
+  [UNIT_TYPE.WYRM]: 7483,
+  [UNIT_TYPE.ZOMBIE]: 7484,
+  [UNIT_TYPE.TORTOISE]: 7485,
+  [UNIT_TYPE.HARPY]: 7486,
+  [UNIT_TYPE.GUARDIAN]: 7487,
+  [UNIT_TYPE.BRIGAND]: 7488,
+};
+
+// HUD Button Coordinates (SRC/WORLD.CPP)
+export const VERB_BUTTONS = [
+  { id: 'MOVE', x: 122, y: 320, w: 33, h: 29, anim: 109, key: 'M' },
+  { id: 'ATTACK', x: 157, y: 320, w: 33, h: 29, anim: 110, key: 'A' },
+  { id: 'GUARD', x: 122, y: 350, w: 33, h: 29, anim: 111, key: 'G' },
+  { id: 'DISBAND', x: 253, y: 274, w: 28, h: 28, anim: 122, key: 'D' },
+  { id: 'SKILL', x: 194, y: 322, w: 86, h: 31, anim: 108, key: 'S' },
+  { id: 'TRANSFORM', x: 194, y: 356, w: 86, h: 26, anim: 107, key: 'T' },
+  { id: 'DROP', x: 284, y: 373, w: 35, h: 11, anim: 115, key: 'O' },
+];
+
+export const TRANSFORM_BUTTONS = [
+  { slot: 0, x: 122, y: 320, w: 37, h: 48 },
+  { slot: 1, x: 160, y: 320, w: 37, h: 48 },
+  { slot: 2, x: 198, y: 320, w: 37, h: 48 },
+  { slot: 3, x: 236, y: 320, w: 37, h: 48 },
+  { slot: 4, x: 274, y: 320, w: 37, h: 48 },
+];
+
+export const MAIN_BUTTONS = [
+  { id: 'FREEZE', x: 253, y: 184, w: 28, h: 28, anim: 126, key: 'P' },
+  { id: 'SETTINGS', x: 282, y: 184, w: 28, h: 28, anim: 129, key: null },
+  { id: 'QUESTION', x: 253, y: 214, w: 28, h: 28, anim: 125, key: null },
+  { id: 'ENCYCLO', x: 282, y: 214, w: 28, h: 28, anim: 128, key: null },
+  { id: 'WINLOSE', x: 253, y: 244, w: 28, h: 28, anim: 124, key: 'W' },
+  { id: 'GOSEE', x: 282, y: 244, w: 28, h: 28, anim: 112, key: ' ' },
+];
