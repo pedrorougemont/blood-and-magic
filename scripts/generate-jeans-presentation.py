@@ -347,3 +347,4 @@ j_orig_18x.save(
 j_orig_18x.save(os.path.join(ARTIFACT_DIR, 'archer_jeans_close_toggle.gif'), save_all=True, append_images=[j_new_18x], duration=800, loop=0)
 
 print("Saved animated comparison GIFs for Jeans.")
+
