@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Blood &amp; Magic — Sprite Lab &amp; Pixelation Engine</title>
+  <link rel="stylesheet" href="/style.css" />
+  <style>
+    body {
+      overflow-y: auto;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    .lab-container {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      padding: 16px 24px;
+      max-width: 1400px;
+      margin: 0 auto;
+      width: 100%;
+    }
+    .lab-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--border-gold);
+      padding-bottom: 12px;
+    }
+    .lab-header h2 {
+      color: var(--accent-gold);
+      font-size: 18px;
+      margin: 0;
+      letter-spacing: 0.05em;
+    }
+    .lab-header p {
+      color: var(--text-muted);
+      font-size: 13px;
+      margin: 4px 0 0 0;
+    }
+    .controls-panel {
+      background: var(--bg-panel);
+      border: 1px solid var(--border-subtle);
+      border-radius: 6px;
+      padding: 14px 18px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+      align-items: center;
+    }
+    .ctrl-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .ctrl-group label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--accent-gold);
+      display: flex;
+      justify-content: space-between;
+    }
+    .ctrl-group label span {
+      color: #fff;
+    }
+    .ctrl-group input[type="range"] {
+      width: 100%;
+      accent-color: var(--accent-gold);
+      cursor: pointer;
+    }
+    .ctrl-checkbox {
+      flex-direction: row;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      font-size: 12px;
+      color: var(--text-main);
+    }
+    .dropzone {
+      border: 2px dashed var(--border-gold);
+      border-radius: 8px;
+      background: #11141c;
+      padding: 20px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .dropzone.dragover {
+      background: #1c2230;
+      border-color: #fff;
+    }
+    .dropzone p {
+      margin: 0;
+      color: var(--text-muted);
+      font-size: 13px;
+    }
+    .dropzone strong {
+      color: var(--accent-gold);
+    }
+    .comparison-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 16px;
+    }
+    .algo-card {
+      background: var(--bg-panel);
+      border: 1px solid var(--border-subtle);
+      border-radius: 6px;
+      padding: 12px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      transition: border-color 0.2s ease;
+    }
+    .algo-card.selected {
+      border-color: var(--accent-gold);
+      box-shadow: 0 0 12px rgba(212, 163, 62, 0.25);
+    }
+    .algo-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .algo-card-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: #fff;
+    }
+    .algo-badge {
+      font-size: 10px;
+      padding: 2px 6px;
+      border-radius: 3px;
+      background: #252d3d;
+      color: var(--accent-gold);
+      font-weight: 600;
+    }
+    .canvas-preview-wrapper {
+      background: #000;
+      border: 1px solid #232a3b;
+      height: 200px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    .canvas-preview-wrapper canvas {
+      image-rendering: pixelated;
+      image-rendering: crisp-edges;
+    }
+    .algo-desc {
+      font-size: 11px;
+      color: var(--text-muted);
+      line-height: 1.4;
+      min-height: 32px;
+    }
+    .card-actions {
+      display: flex;
+      gap: 8px;
+    }
+    .card-actions button {
+      flex: 1;
+    }
+    .game-test-bench {
+      background: var(--bg-panel);
+      border: 1px solid var(--border-gold);
+      border-radius: 6px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .bench-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .bench-header h3 {
+      font-size: 14px;
+      color: var(--accent-gold);
+      margin: 0;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .bench-display {
+      background: #000;
+      border: 2px solid #283144;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    #benchCanvas {
+      image-rendering: pixelated;
+      image-rendering: crisp-edges;
+    }
+    .pixel-grid-toggle {
+      font-size: 11px;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <span class="brand-badge">B&amp;M PIPELINE</span>
+      <h1>Sprite Lab</h1>
+      <span class="subtitle">Hand-Drawn Drawing to 8-Bit Pixel Art Laboratory</span>
+    </div>
+    <div class="toolbar">
+      <a href="/" class="tb-btn" style="text-decoration:none;">&larr; Back to Game</a>
+      <button id="btnLoadSample" class="tb-btn primary">Load Sample Drawing</button>
+      <input type="file" id="fileUpload" accept="image/*" style="display:none;" />
+      <button id="btnUpload" class="tb-btn">Choose Sketch File...</button>
+    </div>
+  </header>
+
+  <div class="lab-container">
+    <div class="lab-header">
+      <div>
+        <h2>Experimental Pixelation &amp; Palette Workbench</h2>
+        <p>Drop your scanned pencil or ink drawing to test downscaling algorithms against the authentic 256-color DOS palette (<code>9100.PAL</code>).</p>
+      </div>
+      <div>
+        <label class="pixel-grid-toggle">
+          <input type="checkbox" id="chkPixelGrid" checked /> Show 8× Pixel Grid
+        </label>
+      </div>
+    </div>
+
+    <!-- Drop Zone -->
+    <div class="dropzone" id="dropZone">
+      <p>Drag &amp; drop your hand-drawn sketch here, or <strong>click to browse</strong> (PNG / JPG / WebP)</p>
+    </div>
+
+    <!-- Parameter Controls -->
+    <div class="controls-panel">
+      <div class="ctrl-group">
+        <label for="rngHeight">Target Height: <span id="lblHeight">36px</span></label>
+        <input type="range" id="rngHeight" min="20" max="50" value="36" />
+      </div>
+
+      <div class="ctrl-group">
+        <label for="rngKnockout">Paper Knockout Threshold: <span id="lblKnockout">235</span></label>
+        <input type="range" id="rngKnockout" min="150" max="255" value="235" />
+      </div>
+
+      <div class="ctrl-group">
+        <label for="rngContrast">Ink Contrast Boost: <span id="lblContrast">1.2x</span></label>
+        <input type="range" id="rngContrast" min="0.8" max="2.0" step="0.05" value="1.2" />
+      </div>
+
+      <div class="ctrl-group">
+        <label for="rngTeamHue">Team Color Accent Hue: <span id="lblTeamHue">Red (0&deg;)</span></label>
+        <input type="range" id="rngTeamHue" min="0" max="360" value="0" />
+      </div>
+
+      <div class="ctrl-group">
+        <label class="ctrl-checkbox">
+          <input type="checkbox" id="chkModeXAspect" checked />
+          Mode X 5:6 Tall-Pixel Aspect Compensation
+        </label>
+      </div>
+
+      <div class="ctrl-group">
+        <label class="ctrl-checkbox">
+          <input type="checkbox" id="chkTeamBlue" />
+          Preview Side 2 (Red) instead of Side 1 (Blue)
+        </label>
+      </div>
+    </div>
+
+    <!-- 4 Side-by-Side Algorithm Comparison Cards -->
+    <div class="comparison-grid">
+      <!-- Card 1: Kuwahara Cel-Flatten -->
+      <div class="algo-card selected" id="cardKuwahara">
+        <div class="algo-card-header">
+          <span class="algo-card-title">1. Kuwahara Cel-Flat</span>
+          <span class="algo-badge">Flat Color Fills</span>
+        </div>
+        <div class="canvas-preview-wrapper">
+          <canvas id="cvsKuwahara" width="160" height="160"></canvas>
+        </div>
+        <p class="algo-desc">Smooths paper texture into solid comic-like color planes while locking onto outer ink edges. Zero dither noise.</p>
+        <div class="card-actions">
+          <button class="tb-btn" onclick="selectAlgorithm('kuwahara')">Test on Map</button>
+          <button class="tb-btn primary" onclick="downloadIndexedPNG('kuwahara')">Save PNG</button>
+        </div>
+      </div>
+
+      <!-- Card 2: Morphological Crisp Ink -->
+      <div class="algo-card" id="cardCrispInk">
+        <div class="algo-card-header">
+          <span class="algo-card-title">2. Crisp Ink Outline</span>
+          <span class="algo-badge">Line Preservation</span>
+        </div>
+        <div class="canvas-preview-wrapper">
+          <canvas id="cvsCrispInk" width="160" height="160"></canvas>
+        </div>
+        <p class="algo-desc">Boosts pencil/ink edges with Laplacian sharpening, forcing a clean 1-pixel dark outline around character silhouettes.</p>
+        <div class="card-actions">
+          <button class="tb-btn" onclick="selectAlgorithm('crisp')">Test on Map</button>
+          <button class="tb-btn primary" onclick="downloadIndexedPNG('crisp')">Save PNG</button>
+        </div>
+      </div>
+
+      <!-- Card 3: Atkinson Dithering -->
+      <div class="algo-card" id="cardAtkinson">
+        <div class="algo-card-header">
+          <span class="algo-card-title">3. Atkinson Dither</span>
+          <span class="algo-badge">Classic 90s DOS/Mac</span>
+        </div>
+        <div class="canvas-preview-wrapper">
+          <canvas id="cvsAtkinson" width="160" height="160"></canvas>
+        </div>
+        <p class="algo-desc">Diffuses color quantization error into organic 2-dot patterns without washing out deep black shadows or specular highlights.</p>
+        <div class="card-actions">
+          <button class="tb-btn" onclick="selectAlgorithm('atkinson')">Test on Map</button>
+          <button class="tb-btn primary" onclick="downloadIndexedPNG('atkinson')">Save PNG</button>
+        </div>
+      </div>
+
+      <!-- Card 4: Bayer 4x4 Matrix Dither -->
+      <div class="algo-card" id="cardBayer">
+        <div class="algo-card-header">
+          <span class="algo-card-title">4. Bayer 4×4 Matrix</span>
+          <span class="algo-badge">Hardware Cross-Hatch</span>
+        </div>
+        <div class="canvas-preview-wrapper">
+          <canvas id="cvsBayer" width="160" height="160"></canvas>
+        </div>
+        <p class="algo-desc">Ordered hardware matrix dithering producing structured cross-hatch gradients reminiscent of PC-98 and early VGA RTS games.</p>
+        <div class="card-actions">
+          <button class="tb-btn" onclick="selectAlgorithm('bayer')">Test on Map</button>
+          <button class="tb-btn primary" onclick="downloadIndexedPNG('bayer')">Save PNG</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Live Test Bench on Authentic Blood & Magic Map Tiles -->
+    <div class="game-test-bench">
+      <div class="bench-header">
+        <h3>Live Gameplay Context Test (Standing on Blood &amp; Magic Tiles)</h3>
+        <span style="font-size:12px; color:var(--text-muted);">
+          Selected Algorithm: <strong id="lblSelectedAlgo" style="color:var(--accent-gold);">1. Kuwahara Cel-Flat</strong> | Tile Anchor: Center (9, 18)
+        </span>
+      </div>
+      <div class="bench-display">
+        <canvas id="benchCanvas" width="480" height="240"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="/sprite-lab.js"></script>
+</body>
+</html>
