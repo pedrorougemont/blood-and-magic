@@ -30,3 +30,4 @@ Designed for seamless deployment to Cloudflare Workers / Cloudflare Pages:
 ```bash
 npx wrangler pages deploy public
 ```
+

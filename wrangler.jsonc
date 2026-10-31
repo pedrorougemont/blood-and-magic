@@ -1,7 +1,7 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "blood-and-magic-prototype",
-  "main": "src/worker.js",
+  "main": "worker/worker.js",
   "compatibility_date": "2025-02-01",
   "assets": {
     "directory": "./public",
