@@ -18,3 +18,4 @@ for y in range(h):
         val = arr[y, x]
         if 192 <= val <= 199:
             print(f"  y={y:2d}, x={x:2d}: index={val}")
+

@@ -16,3 +16,4 @@ print("Rows 5 to 17 in Ranger cel 0:")
 for y in range(5, 18):
     row_str = ' '.join(f"{arr[y, x]:3d}" if arr[y, x] != 254 else "  ." for x in range(w))
     print(f"y={y:2d}: {row_str}")
+

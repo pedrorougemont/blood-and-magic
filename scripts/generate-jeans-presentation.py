@@ -102,6 +102,33 @@ def apply_jeans(arr):
     # Row 25: Cuffs into boots
     arr[25, 4] = 87; arr[25, 8] = 88; arr[25, 9] = 87
 
+def apply_sculpted_arm(arr):
+    # Trims the arm on the right (x=10..13, y=11..20) from bloated 4px to natural slender 2-3px
+    arr[11, 10] = 34;  arr[11, 11] = 38;  arr[11, 12] = 33;  arr[11, 13] = 254
+    arr[12, 10] = 33;  arr[12, 11] = 37;  arr[12, 12] = 32;  arr[12, 13] = 254
+    arr[13, 10] = 120; arr[13, 11] = 170; arr[13, 12] = 171; arr[13, 13] = 254
+    arr[14, 10] = 121; arr[14, 11] = 172; arr[14, 12] = 169; arr[14, 13] = 254
+    arr[15, 10] = 121; arr[15, 11] = 171; arr[15, 12] = 120; arr[15, 13] = 254
+    arr[16, 10] = 120; arr[16, 11] = 170; arr[16, 12] = 119; arr[16, 13] = 254
+    arr[17, 10] = 121; arr[17, 11] = 172; arr[17, 12] = 170; arr[17, 13] = 254
+    arr[18, 10] = 120; arr[18, 11] = 171; arr[18, 12] = 169; arr[18, 13] = 254
+    arr[19, 10] = 120; arr[19, 11] = 170; arr[19, 12] = 254; arr[19, 13] = 254
+    arr[20, 10] = 119; arr[20, 11] = 254; arr[20, 12] = 254; arr[20, 13] = 254
+    # Left wrist wrap removal
+    arr[16, 0] = 169;  arr[17, 0] = 170;  arr[18, 0] = 169
+    # Belt buckle
+    arr[14, 3] = 17;   arr[14, 9] = 17
+    arr[15, 4] = 18;   arr[15, 6] = 152;  arr[15, 8] = 18
+    arr[16, 3] = 17;   arr[16, 5] = 18;   arr[16, 7] = 18
+    arr[17, 4] = 18;   arr[17, 6] = 152
+
+def apply_gray_armor(arr):
+    g_to_g = {57: 32, 58: 33, 59: 34, 60: 35, 61: 36, 62: 37, 63: 39, 64: 41}
+    for y in range(h):
+        for x in range(w):
+            if arr[y, x] in g_to_g:
+                arr[y, x] = g_to_g[arr[y, x]]
+
 # Build the 4 sequential stages:
 # Stage 1: Original
 arr_s1 = orig_arr.copy()
@@ -115,16 +142,20 @@ arr_s3 = orig_arr.copy()
 apply_brown_skin(arr_s3)
 apply_helmet(arr_s3)
 
-# Stage 4: + Brown Skin + Helmet + JEANS (Full Additive Master!)
+# Stage 4: + Brown Skin + Helmet + Gray Armor + JEANS + Sculpted Arm (Full Additive Master!)
 arr_s4 = orig_arr.copy()
 apply_brown_skin(arr_s4)
 apply_helmet(arr_s4)
+apply_gray_armor(arr_s4)
 apply_jeans(arr_s4)
+apply_sculpted_arm(arr_s4)
 
 # Also: Brown Skin + Jeans (without helmet)
 arr_s4_nohelm = orig_arr.copy()
 apply_brown_skin(arr_s4_nohelm)
+apply_gray_armor(arr_s4_nohelm)
 apply_jeans(arr_s4_nohelm)
+apply_sculpted_arm(arr_s4_nohelm)
 
 # Render PIL Images
 img_s1 = arr_to_rgba(arr_s1, base_pal)
