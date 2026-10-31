@@ -1,0 +1,786 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Blood & Magic - Warrior & Ranger Spritesheets</title>
+  <style>
+    :root {
+      --bg-dark: #0f121a;
+      --panel-bg: #181c28;
+      --card-bg: #202636;
+      --border-color: #3b455e;
+      --accent-gold: #c8a356;
+      --accent-blue: #4fa4f4;
+      --accent-red: #ea5555;
+      --text-main: #e2e8f0;
+      --text-muted: #8c9cb8;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: var(--bg-dark);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    header {
+      background: #141824;
+      border-bottom: 2px solid var(--accent-gold);
+      padding: 12px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .brand h1 {
+      font-size: 1.25rem;
+      letter-spacing: 1px;
+      color: var(--accent-gold);
+      text-transform: uppercase;
+      font-weight: 700;
+    }
+    .brand .badge {
+      background: #2a344d;
+      color: var(--accent-blue);
+      font-size: 0.75rem;
+      padding: 3px 8px;
+      border-radius: 4px;
+      font-family: monospace;
+    }
+
+    nav {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+    .nav-btn {
+      background: var(--card-bg);
+      color: var(--text-main);
+      border: 1px solid var(--border-color);
+      padding: 6px 14px;
+      border-radius: 4px;
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.15s ease;
+    }
+    .nav-btn:hover, .nav-btn.active {
+      background: var(--accent-gold);
+      color: #000;
+      border-color: var(--accent-gold);
+    }
+
+    .controls-bar {
+      background: #181d2c;
+      border-bottom: 1px solid var(--border-color);
+      padding: 10px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+      font-size: 0.85rem;
+    }
+    .control-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .btn-toggle {
+      background: #232b3d;
+      border: 1px solid var(--border-color);
+      color: var(--text-muted);
+      padding: 4px 10px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 0.8rem;
+    }
+    .btn-toggle.active {
+      background: #2c4475;
+      color: #fff;
+      border-color: var(--accent-blue);
+    }
+
+    main {
+      flex: 1;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      max-width: 1600px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    .section-card {
+      background: var(--panel-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+    }
+    .card-header {
+      background: #1d2334;
+      border-bottom: 1px solid var(--border-color);
+      padding: 12px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .card-header h2 {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--accent-gold);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .card-header .actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    .scroll-container {
+      overflow-x: auto;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      background: #11141e;
+      position: relative;
+    }
+    .checkerboard {
+      background-image: 
+        linear-gradient(45deg, #181d2a 25%, transparent 25%), 
+        linear-gradient(-45deg, #181d2a 25%, transparent 25%), 
+        linear-gradient(45deg, transparent 75%, #181d2a 75%), 
+        linear-gradient(-45deg, transparent 75%, #181d2a 75%);
+      background-size: 16px 16px;
+      background-position: 0 0, 0 8px, 8px -8px, -8px 0px;
+      background-color: #0f121a;
+    }
+    .dark-bg {
+      background: #0d1017 !important;
+    }
+
+    .pixel-img {
+      image-rendering: pixelated;
+      image-rendering: -moz-crisp-edges;
+      image-rendering: crisp-edges;
+      display: block;
+      transition: transform 0.1s ease;
+      transform-origin: top left;
+    }
+
+    .strip-wrapper {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .strip-title {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* Interactive Player */
+    .player-container {
+      display: grid;
+      grid-template-columns: 240px 1fr;
+      gap: 20px;
+      padding: 20px;
+    }
+    @media (max-width: 800px) {
+      .player-container { grid-template-columns: 1fr; }
+    }
+    .preview-stage {
+      background: #0d1018;
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      min-height: 220px;
+    }
+    #previewCanvas {
+      image-rendering: pixelated;
+      background: transparent;
+    }
+    .player-controls {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      justify-content: center;
+    }
+    .control-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .control-row label {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      min-width: 80px;
+    }
+    select, input[type="range"] {
+      background: #232b3d;
+      color: var(--text-main);
+      border: 1px solid var(--border-color);
+      padding: 6px 10px;
+      border-radius: 4px;
+      font-size: 0.85rem;
+    }
+    input[type="range"] {
+      flex: 1;
+      accent-color: var(--accent-gold);
+    }
+
+    .stat-badge {
+      font-family: monospace;
+      font-size: 0.75rem;
+      padding: 2px 6px;
+      border-radius: 3px;
+      background: #2a344c;
+      color: #9cb3db;
+    }
+
+    .dl-btn {
+      background: #1e3a66;
+      color: #fff;
+      border: 1px solid #36609f;
+      padding: 4px 10px;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      text-decoration: none;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .dl-btn:hover {
+      background: #284e8a;
+    }
+
+    footer {
+      border-top: 1px solid var(--border-color);
+      padding: 16px 24px;
+      text-align: center;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-top: auto;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="brand">
+      <h1>Blood & Magic</h1>
+      <span class="badge">VGA 8-bit Sprite Studio</span>
+    </div>
+    <nav>
+      <a href="/" class="nav-btn">⚔️ Play Game</a>
+      <a href="/sprite-lab.html" class="nav-btn">🎨 Sprite Lab</a>
+      <a href="#comparison" class="nav-btn">⚖️ Side-by-Side</a>
+      <a href="#animator" class="nav-btn">▶️ Live Animator</a>
+    </nav>
+  </header>
+
+  <div class="controls-bar">
+    <div class="control-group">
+      <span>Zoom Level:</span>
+      <button class="btn-toggle" onclick="setZoom(1)">1x (Native)</button>
+      <button class="btn-toggle active" onclick="setZoom(2)">2x</button>
+      <button class="btn-toggle" onclick="setZoom(3)">3x</button>
+      <button class="btn-toggle" onclick="setZoom(4)">4x</button>
+    </div>
+    <div class="control-group">
+      <span>Background:</span>
+      <button class="btn-toggle active" onclick="setBg('checker')">Checker</button>
+      <button class="btn-toggle" onclick="setBg('dark')">Dark Slate</button>
+    </div>
+    <div class="control-group">
+      <span>Team Color:</span>
+      <button class="btn-toggle active" id="btnSideBlue" onclick="toggleTeamColor('blue')">🔵 Blue (Side 1)</button>
+      <button class="btn-toggle" id="btnSideRed" onclick="toggleTeamColor('red')">🔴 Red (Side 2)</button>
+    </div>
+  </div>
+
+  <main>
+
+    <!-- SECTION 1: WARRIOR SPRITESHEET & SIDE-BY-SIDE STRIPS -->
+    <section class="section-card" id="warrior">
+      <div class="card-header">
+        <h2>
+          <span>🗡️ Warrior (Base 1600)</span>
+          <span class="stat-badge">61 Canonical Frames</span>
+          <span class="stat-badge">Uniform 80x96 Cell</span>
+          <span class="stat-badge">Anchor (40, 58)</span>
+        </h2>
+        <div class="actions">
+          <a href="/assets/spritesheets/warrior_strip.png" download class="dl-btn">📥 Download Strip (4880x96)</a>
+          <a href="/assets/spritesheets/spritesheet_warrior.png" download class="dl-btn">📥 Download Sheet (1680x288)</a>
+          <a href="/assets/spritesheets/warrior_presentation.png" target="_blank" class="dl-btn">🔍 View Annotated (3968x912)</a>
+        </div>
+      </div>
+
+      <div class="scroll-container checkerboard" id="warriorContainer">
+        <div class="strip-wrapper">
+          <div class="strip-title">
+            <span>Walk Sequence (5 Directions: S, SE, E, NE, N &bull; 20 frames side-by-side)</span>
+          </div>
+          <img src="/assets/spritesheets/warrior_walk_strip.png" class="pixel-img zoom-target" alt="Warrior Walk Strip" />
+        </div>
+
+        <div class="strip-wrapper">
+          <div class="strip-title">
+            <span>Sword Attack Sequence (5 Directions: S, SE, E, NE, N &bull; 20 frames side-by-side)</span>
+          </div>
+          <img src="/assets/spritesheets/warrior_attack_strip.png" class="pixel-img zoom-target" alt="Warrior Attack Strip" />
+        </div>
+
+        <div class="strip-wrapper">
+          <div class="strip-title">
+            <span>Actions (Guard 4 &bull; Hit A 4 &bull; Hit B 4 &bull; Death 8 &bull; Corpse 1 &bull; 21 frames side-by-side)</span>
+          </div>
+          <img src="/assets/spritesheets/warrior_actions_strip.png" class="pixel-img zoom-target" alt="Warrior Actions Strip" />
+        </div>
+
+        <div class="strip-wrapper">
+          <div class="strip-title">
+            <span>Complete Horizontal Filmstrip (All 61 Frames Disposed Side-by-Side)</span>
+          </div>
+          <img id="warriorFullStrip" src="/assets/spritesheets/warrior_strip.png" class="pixel-img zoom-target" alt="Warrior Complete Strip" />
+        </div>
+
+        <div class="strip-wrapper">
+          <div class="strip-title">
+            <span>Full 8-Direction 360° Walk Rotation (32 frames side-by-side with horizontal flips)</span>
+          </div>
+          <img src="/assets/spritesheets/warrior_walk_8dir_strip.png" class="pixel-img zoom-target" alt="Warrior 8-Dir Walk" />
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 2: RANGER SPRITESHEET & SIDE-BY-SIDE STRIPS -->
+    <section class="section-card" id="ranger">
+      <div class="card-header">
+        <h2>
+          <span>🏹 Ranger (Base 1350)</span>
+          <span class="stat-badge">84 Canonical Frames</span>
+          <span class="stat-badge">Uniform 80x96 Cell</span>
+          <span class="stat-badge">Anchor (40, 58)</span>
+        </h2>
+        <div class="actions">
+          <a href="/assets/spritesheets/ranger_strip.png" download class="dl-btn">📥 Download Strip (6720x96)</a>
+          <a href="/assets/spritesheets/spritesheet_ranger.png" download class="dl-btn">📥 Download Sheet (1920x384)</a>
+          <a href="/assets/spritesheets/ranger_presentation.png" target="_blank" class="dl-btn">🔍 View Annotated (4472x1136)</a>
+        </div>
+      </div>
+
+      <div class="scroll-container checkerboard" id="rangerContainer">
+        <div class="strip-wrapper">
+          <div class="strip-title">
+            <span>Walk Sequence (5 Directions: S, SE, E, NE, N &bull; 20 frames side-by-side)</span>
+          </div>
+          <img src="/assets/spritesheets/ranger_walk_strip.png" class="pixel-img zoom-target" alt="Ranger Walk Strip" />
+        </div>
+
+        <div class="strip-wrapper">
+          <div class="strip-title">
+            <span>Ranged Bow Attack (5 Directions: S, SE, E, NE, N &bull; 20 frames side-by-side)</span>
+          </div>
+          <img src="/assets/spritesheets/ranger_bow_strip.png" class="pixel-img zoom-target" alt="Ranger Bow Strip" />
+        </div>
+
+        <div class="strip-wrapper">
+          <div class="strip-title">
+            <span>Melee Dagger Attack (5 Directions: S, SE, E, NE, N &bull; 20 frames side-by-side)</span>
+          </div>
+          <img src="/assets/spritesheets/ranger_dagger_strip.png" class="pixel-img zoom-target" alt="Ranger Dagger Strip" />
+        </div>
+
+        <div class="strip-wrapper">
+          <div class="strip-title">
+            <span>Actions & Projectiles (Guard 4 &bull; Hit A 4 &bull; Hit B 4 &bull; Death 8 &bull; Corpse 1 &bull; Arrows 3 &bull; 24 frames side-by-side)</span>
+          </div>
+          <img src="/assets/spritesheets/ranger_actions_strip.png" class="pixel-img zoom-target" alt="Ranger Actions Strip" />
+        </div>
+
+        <div class="strip-wrapper">
+          <div class="strip-title">
+            <span>Complete Horizontal Filmstrip (All 84 Frames Disposed Side-by-Side)</span>
+          </div>
+          <img id="rangerFullStrip" src="/assets/spritesheets/ranger_strip.png" class="pixel-img zoom-target" alt="Ranger Complete Strip" />
+        </div>
+
+        <div class="strip-wrapper">
+          <div class="strip-title">
+            <span>Full 8-Direction 360° Walk Rotation (32 frames side-by-side with horizontal flips)</span>
+          </div>
+          <img src="/assets/spritesheets/ranger_walk_8dir_strip.png" class="pixel-img zoom-target" alt="Ranger 8-Dir Walk" />
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 3: ROSTER SIDE-BY-SIDE COMPARISON -->
+    <section class="section-card" id="comparison">
+      <div class="card-header">
+        <h2>
+          <span>⚖️ Warrior & Ranger Roster Side-by-Side Comparison</span>
+          <span class="stat-badge">2x Scale Annotated Master Guide</span>
+        </h2>
+        <div class="actions">
+          <a href="/assets/spritesheets/warrior_ranger_comparison.png" download class="dl-btn">📥 Download Comparison (4472x1808)</a>
+          <a href="/assets/spritesheets/spritesheets_manifest.json" download class="dl-btn">📄 Manifest JSON</a>
+        </div>
+      </div>
+      <div class="scroll-container dark-bg">
+        <img src="/assets/spritesheets/warrior_ranger_comparison.png" class="pixel-img" style="max-width: 100%; height: auto;" alt="Warrior and Ranger Comparison" />
+      </div>
+    </section>
+
+    <!-- SECTION 4: LIVE ANIMATION PLAYER -->
+    <section class="section-card" id="animator">
+      <div class="card-header">
+        <h2>
+          <span>▶️ Interactive Sprite Animator</span>
+          <span class="stat-badge">DOS Exact Framerate & Alignment</span>
+        </h2>
+      </div>
+      <div class="player-container">
+        <div class="preview-stage">
+          <canvas id="previewCanvas" width="240" height="288"></canvas>
+          <div style="margin-top: 10px; font-size: 0.8rem; color: var(--text-muted); font-family: monospace;" id="animInfo">Frame: 1 / 4</div>
+        </div>
+
+        <div class="player-controls">
+          <div class="control-row">
+            <label>Unit:</label>
+            <select id="animUnitSelect" onchange="updateAnimList()">
+              <option value="warrior">Warrior (Base 1600)</option>
+              <option value="ranger">Ranger (Base 1350)</option>
+            </select>
+          </div>
+
+          <div class="control-row">
+            <label>Animation:</label>
+            <select id="animClipSelect" onchange="resetAnim()">
+              <!-- Populated by JS -->
+            </select>
+          </div>
+
+          <div class="control-row">
+            <label>Direction:</label>
+            <select id="animDirSelect" onchange="resetAnim()">
+              <option value="0">0: South (Down)</option>
+              <option value="1">1: South-East (Down-Right)</option>
+              <option value="2">2: East (Right)</option>
+              <option value="3">3: North-East (Up-Right)</option>
+              <option value="4">4: North (Up)</option>
+              <option value="5">5: North-West (Up-Left, flipped)</option>
+              <option value="6">6: West (Left, flipped)</option>
+              <option value="7">7: South-West (Down-Left, flipped)</option>
+            </select>
+          </div>
+
+          <div class="control-row">
+            <label>Play Speed:</label>
+            <input type="range" id="animFps" min="1" max="24" value="8" oninput="updateFpsDisplay()" />
+            <span id="fpsDisplay" style="font-family: monospace; font-size: 0.85rem; width: 45px;">8 FPS</span>
+          </div>
+
+          <div class="control-row" style="margin-top: 8px;">
+            <button class="nav-btn" id="btnPlayPause" onclick="togglePlay()">⏸️ Pause</button>
+            <button class="nav-btn" onclick="stepFrame(-1)">⏮️ Prev</button>
+            <button class="nav-btn" onclick="stepFrame(1)">⏭️ Next</button>
+            <label style="display: flex; align-items: center; gap: 6px; cursor: pointer; min-width: auto;">
+              <input type="checkbox" id="chkShowGuides" checked onchange="drawCurrentFrame()" /> Show Anchor & Guides
+            </label>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    Blood & Magic 8-bit Sprite Extraction Studio &bull; Hand-crafted with exact DOS VGA palette accuracy &bull; Foot-anchor calibrated
+  </footer>
+
+  <script>
+    let currentZoom = 2;
+    let isRedTeam = false;
+
+    function setZoom(lvl) {
+      currentZoom = lvl;
+      document.querySelectorAll('.controls-bar .control-group:first-child .btn-toggle').forEach(b => {
+        b.classList.toggle('active', b.textContent.startsWith(lvl + 'x'));
+      });
+      document.querySelectorAll('.zoom-target').forEach(img => {
+        img.style.transform = `scale(${lvl})`;
+        img.style.marginBottom = `${(lvl - 1) * 96}px`;
+        img.style.marginRight = `${(lvl - 1) * 96}px`;
+      });
+    }
+
+    function setBg(type) {
+      document.querySelectorAll('.controls-bar .control-group:nth-child(2) .btn-toggle').forEach(b => {
+        b.classList.toggle('active', (type === 'checker' && b.textContent === 'Checker') || (type === 'dark' && b.textContent === 'Dark Slate'));
+      });
+      document.querySelectorAll('#warriorContainer, #rangerContainer').forEach(el => {
+        if (type === 'checker') {
+          el.className = 'scroll-container checkerboard';
+        } else {
+          el.className = 'scroll-container dark-bg';
+        }
+      });
+    }
+
+    function toggleTeamColor(col) {
+      isRedTeam = (col === 'red');
+      document.getElementById('btnSideBlue').classList.toggle('active', !isRedTeam);
+      document.getElementById('btnSideRed').classList.toggle('active', isRedTeam);
+
+      // Swap structured sheet images if available
+      const wImg = document.getElementById('warriorFullStrip');
+      const rImg = document.getElementById('rangerFullStrip');
+      // Update canvas animator
+      if (window.reloadAnimatorPalette) window.reloadAnimatorPalette();
+    }
+
+    // Interactive Animation Engine
+    const canvas = document.getElementById('previewCanvas');
+    const ctx = canvas.getContext('2d');
+    let animRunning = true;
+    let animTimer = null;
+    let currentFrameIdx = 0;
+    let lastTickTime = 0;
+    let animManifest = null;
+    let animBin = null;
+    let palettes = null;
+
+    const clips = {
+      warrior: [
+        { id: 'walk', name: 'Walk (4 frames)', base: 1600, count: 4, hasDir: true },
+        { id: 'attack', name: 'Sword Attack (4 frames)', base: 1610, count: 4, hasDir: true },
+        { id: 'guard', name: 'Guard Idle (4 frames)', base: 1620, count: 4, hasDir: false },
+        { id: 'hit1', name: 'Hit Damage A (4 frames)', base: 1625, count: 4, hasDir: false },
+        { id: 'hit2', name: 'Hit Damage B (4 frames)', base: 1626, count: 4, hasDir: false },
+        { id: 'die', name: 'Death (8 frames)', base: 1630, count: 8, hasDir: false }
+      ],
+      ranger: [
+        { id: 'walk', name: 'Walk (4 frames)', base: 1350, count: 4, hasDir: true },
+        { id: 'bow', name: 'Bow Attack (4 frames)', base: 1360, count: 4, hasDir: true },
+        { id: 'dagger', name: 'Dagger Attack (4 frames)', base: 1390, count: 4, hasDir: true },
+        { id: 'guard', name: 'Guard Idle (4 frames)', base: 1370, count: 4, hasDir: false },
+        { id: 'hit1', name: 'Hit Damage A (4 frames)', base: 1375, count: 4, hasDir: false },
+        { id: 'hit2', name: 'Hit Damage B (4 frames)', base: 1376, count: 4, hasDir: false },
+        { id: 'die', name: 'Death (8 frames)', base: 1380, count: 8, hasDir: false }
+      ]
+    };
+
+    function updateAnimList() {
+      const u = document.getElementById('animUnitSelect').value;
+      const sel = document.getElementById('animClipSelect');
+      sel.innerHTML = '';
+      clips[u].forEach((c, i) => {
+        const opt = document.createElement('option');
+        opt.value = i;
+        opt.textContent = c.name;
+        sel.appendChild(opt);
+      });
+      resetAnim();
+    }
+
+    function resetAnim() {
+      currentFrameIdx = 0;
+      drawCurrentFrame();
+    }
+
+    function updateFpsDisplay() {
+      const fps = document.getElementById('animFps').value;
+      document.getElementById('fpsDisplay').textContent = fps + ' FPS';
+    }
+
+    function togglePlay() {
+      animRunning = !animRunning;
+      document.getElementById('btnPlayPause').textContent = animRunning ? '⏸️ Pause' : '▶️ Play';
+    }
+
+    function stepFrame(delta) {
+      animRunning = false;
+      document.getElementById('btnPlayPause').textContent = '▶️ Play';
+      const u = document.getElementById('animUnitSelect').value;
+      const clip = clips[u][parseInt(document.getElementById('animClipSelect').value)];
+      currentFrameIdx = (currentFrameIdx + delta + clip.count) % clip.count;
+      drawCurrentFrame();
+    }
+
+    async function initAnimator() {
+      try {
+        const [pResp, aResp, bResp] = await Promise.all([
+          fetch('/assets/palettes.json').then(r => r.json()),
+          fetch('/assets/anims.json').then(r => r.json()),
+          fetch('/assets/anims.bin').then(r => r.arrayBuffer())
+        ]);
+        palettes = pResp;
+        animManifest = aResp;
+        animBin = new Uint8Array(bResp);
+        updateAnimList();
+        requestAnimationFrame(animLoop);
+      } catch (e) {
+        console.error('Failed to load assets for animator:', e);
+      }
+    }
+
+    function getActivePalette() {
+      if (!palettes) return null;
+      const base = palettes['9100'];
+      const unit = palettes['9101'];
+      const pal = base.map(c => [...c]);
+      const sOffset = isRedTeam ? 192 : 200; // Red or Blue
+      for (let i = 0; i < 8; i++) {
+        pal[192 + i] = unit[sOffset + i];
+      }
+      return pal;
+    }
+
+    function drawCurrentFrame() {
+      if (!animManifest || !animBin) return;
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      const u = document.getElementById('animUnitSelect').value;
+      const clip = clips[u][parseInt(document.getElementById('animClipSelect').value)];
+      const dir = parseInt(document.getElementById('animDirSelect').value);
+
+      // Determine anim ID & flip
+      let animId = clip.base;
+      let hflip = false;
+      if (clip.hasDir) {
+        const dirMap = [
+          [0, false], [1, false], [2, false], [3, false],
+          [4, false], [3, true],  [2, true],  [1, true]
+        ];
+        const [dOff, flip] = dirMap[dir];
+        animId = clip.base + dOff;
+        hflip = flip;
+      }
+
+      const cels = animManifest[animId];
+      if (!cels || cels.length === 0) return;
+      const cel = cels[currentFrameIdx % cels.length];
+
+      // Guides
+      const scale = 3;
+      const anchorX = 40 * scale;
+      const anchorY = 58 * scale;
+      const showGuides = document.getElementById('chkShowGuides').checked;
+
+      if (showGuides) {
+        // Cell boundary
+        ctx.strokeStyle = '#2b3952';
+        ctx.lineWidth = 1;
+        ctx.strokeRect(0.5, 0.5, 80 * scale - 1, 96 * scale - 1);
+
+        // Foot Baseline
+        ctx.strokeStyle = '#41587d';
+        ctx.beginPath();
+        ctx.moveTo(10, anchorY + 0.5);
+        ctx.lineTo(80 * scale - 10, anchorY + 0.5);
+        ctx.stroke();
+
+        // Anchor crosshair
+        ctx.strokeStyle = '#e07a3c';
+        ctx.beginPath();
+        ctx.moveTo(anchorX - 5, anchorY);
+        ctx.lineTo(anchorX + 5, anchorY);
+        ctx.moveTo(anchorX, anchorY - 5);
+        ctx.lineTo(anchorX, anchorY + 5);
+        ctx.stroke();
+      }
+
+      // Render Cel
+      const pal = getActivePalette();
+      const w = cel.w;
+      const h = cel.h;
+      const off = cel.binOff;
+
+      let drawX = hflip ? anchorX - (w - cel.orgX - 1) * scale : anchorX - cel.orgX * scale;
+      let drawY = anchorY - cel.orgY * scale;
+
+      const imgData = ctx.createImageData(w, h);
+      const data32 = new Uint32Array(imgData.data.buffer);
+      for (let y = 0; y < h; y++) {
+        for (let x = 0; x < w; x++) {
+          const srcX = hflip ? (w - 1 - x) : x;
+          const idx = animBin[off + y * w + srcX];
+          if (idx !== 254) {
+            const rgb = pal[idx];
+            data32[y * w + x] = (255 << 24) | (rgb[2] << 16) | (rgb[1] << 8) | rgb[0];
+          } else {
+            data32[y * w + x] = 0;
+          }
+        }
+      }
+
+      // Draw magnified to canvas
+      createImageBitmap(imgData).then(bmp => {
+        ctx.imageSmoothingEnabled = false;
+        ctx.drawImage(bmp, drawX, drawY, w * scale, h * scale);
+      });
+
+      document.getElementById('animInfo').textContent = `Frame: ${currentFrameIdx + 1} / ${clip.count} | Cel: ${w}x${h}px`;
+    }
+
+    function animLoop(ts) {
+      if (animRunning) {
+        const fps = parseInt(document.getElementById('animFps').value) || 8;
+        const interval = 1000 / fps;
+        if (ts - lastTickTime >= interval) {
+          lastTickTime = ts;
+          const u = document.getElementById('animUnitSelect').value;
+          const clip = clips[u][parseInt(document.getElementById('animClipSelect').value)];
+          currentFrameIdx = (currentFrameIdx + 1) % clip.count;
+          drawCurrentFrame();
+        }
+      }
+      requestAnimationFrame(animLoop);
+    }
+
+    window.reloadAnimatorPalette = () => {
+      drawCurrentFrame();
+    };
+
+    window.addEventListener('DOMContentLoaded', () => {
+      setZoom(2);
+      initAnimator();
+    });
+  </script>
+</body>
+</html>

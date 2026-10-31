@@ -1,0 +1,35 @@
+{
+  "cellWidth": 80,
+  "cellHeight": 96,
+  "anchorX": 40,
+  "anchorY": 58,
+  "warrior": {
+    "baseAnim": 1600,
+    "totalFrames": 61,
+    "categories": {
+      "walk": 20,
+      "attack": 20,
+      "actions": 21
+    },
+    "files": {
+      "sheet": "spritesheet_warrior.png",
+      "strip": "warrior_strip.png",
+      "presentation": "warrior_presentation.png"
+    }
+  },
+  "ranger": {
+    "baseAnim": 1350,
+    "totalFrames": 84,
+    "categories": {
+      "walk": 20,
+      "bow": 20,
+      "dagger": 20,
+      "actions": 24
+    },
+    "files": {
+      "sheet": "spritesheet_ranger.png",
+      "strip": "ranger_strip.png",
+      "presentation": "ranger_presentation.png"
+    }
+  }
+}
