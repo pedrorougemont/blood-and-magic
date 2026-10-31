@@ -325,3 +325,4 @@ h_orig_16x.save(
 h_orig_16x.save(os.path.join(ARTIFACT_DIR, 'archer_brown_head_toggle.gif'), save_all=True, append_images=[h_brown_16x, h_helm_16x], duration=900, loop=0)
 
 print("Saved animated comparison GIFs for skin tone.")
+

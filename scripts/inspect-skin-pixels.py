@@ -23,3 +23,4 @@ for y in range(h):
             row_pixels.append((x, val))
     if row_pixels:
         print(f"y={y:2d}: {row_pixels}")
+

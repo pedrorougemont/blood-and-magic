@@ -86,3 +86,4 @@ for y in range(10, h):
             helm_brown[y, x] = skin_map_warm[val]
 
 print("Remapped both unhelmeted and helmeted sprites.")
+

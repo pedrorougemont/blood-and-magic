@@ -17,3 +17,4 @@ for i, (r, g, b) in enumerate(pal):
         if 0.45 <= rg_ratio <= 0.82 and 0.35 <= gb_ratio <= 0.85:
             lum = int(0.299 * r + 0.587 * g + 0.114 * b)
             print(f"  Index {i:3d}: RGB ({r:3d}, {g:3d}, {b:3d}) | Lum={lum:3d}")
+
