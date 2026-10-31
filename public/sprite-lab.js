@@ -154,6 +154,55 @@ function setupEventListeners() {
     link.href = cvs.toDataURL('image/png');
     link.click();
   };
+
+  // Unit Stats sliders & Deploy to Game
+  const unitSliders = ['rngUnitHP', 'rngUnitAtt', 'rngUnitDef', 'rngUnitMove', 'rngUnitCost'];
+  unitSliders.forEach((id) => {
+    document.getElementById(id)?.addEventListener('input', updateLabels);
+  });
+
+  document.getElementById('btnDeployGame')?.addEventListener('click', () => {
+    const res = processedResults[activeAlgo];
+    if (!res) {
+      alert('Please wait for the image to finish processing.');
+      return;
+    }
+
+    const name = (document.getElementById('txtUnitName')?.value || 'CUSTOM KNIGHT').trim().toUpperCase();
+    const maxHP = Number(document.getElementById('rngUnitHP')?.value) || 80;
+    const attack = Number(document.getElementById('rngUnitAtt')?.value) || 8;
+    const defense = Number(document.getElementById('rngUnitDef')?.value) || 4;
+    const moveRate = Number(document.getElementById('rngUnitMove')?.value) || 3;
+    const cost = Number(document.getElementById('rngUnitCost')?.value) || 60;
+
+    // Convert Uint8Array to binary string and base64
+    let binary = '';
+    const len = res.indexed.byteLength;
+    for (let i = 0; i < len; i++) {
+      binary += String.fromCharCode(res.indexed[i]);
+    }
+    const pixelsBase64 = btoa(binary);
+
+    const customUnitConfig = {
+      name,
+      w: res.w,
+      h: res.h,
+      orgX: Math.floor(res.w / 2),
+      orgY: Math.max(0, res.h - 2),
+      pixelsBase64,
+      maxHP,
+      attack,
+      defense,
+      moveRate,
+      cost,
+      algo: activeAlgo,
+      savedAt: Date.now(),
+    };
+
+    localStorage.setItem('BAM_CUSTOM_UNIT', JSON.stringify(customUnitConfig));
+    alert(`Success! "${name}" is now ready to play in Blood & Magic.\n\nLaunching game... Move a Basal Golem to your Barracks and click Transform!`);
+    window.location.href = '/';
+  });
 }
 
 function updateLabels() {
@@ -167,6 +216,14 @@ function updateLabels() {
   else if (hue >= 160 && hue < 260) hueName = 'Cyan/Blue';
   else if (hue >= 260 && hue < 330) hueName = 'Purple';
   document.getElementById('lblTeamHue').textContent = `${hueName} (${hue}°)`;
+
+  if (document.getElementById('rngUnitHP')) {
+    document.getElementById('lblUnitHP').textContent = document.getElementById('rngUnitHP').value;
+    document.getElementById('lblUnitAtt').textContent = document.getElementById('rngUnitAtt').value;
+    document.getElementById('lblUnitDef').textContent = document.getElementById('rngUnitDef').value;
+    document.getElementById('lblUnitMove').textContent = document.getElementById('rngUnitMove').value;
+    document.getElementById('lblUnitCost').textContent = `${document.getElementById('rngUnitCost').value} Mana`;
+  }
 }
 
 let processTimer = null;
@@ -631,3 +688,4 @@ function renderTestBench() {
 
 // Start lab
 window.addEventListener('DOMContentLoaded', initLab);
+

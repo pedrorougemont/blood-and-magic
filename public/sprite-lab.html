@@ -358,8 +358,50 @@
         <canvas id="benchCanvas" width="480" height="240"></canvas>
       </div>
     </div>
+
+    <!-- Unit Stats & Playable Deployment -->
+    <div class="game-test-bench" style="border-color: #55698b;">
+      <div class="bench-header">
+        <h3>Deploy as Playable Unit to Blood &amp; Magic</h3>
+        <span style="font-size:12px; color:var(--text-muted);">
+          Available at Barracks | Dynamic Team-Color Shifting
+        </span>
+      </div>
+      <div class="controls-panel" style="background:#131722;">
+        <div class="ctrl-group">
+          <label for="txtUnitName">Unit Name:</label>
+          <input type="text" id="txtUnitName" value="BLOOD KNIGHT" style="background:#0f1219; color:#fff; border:1px solid var(--border-gold); padding:5px 8px; border-radius:4px; font-weight:700;" />
+        </div>
+        <div class="ctrl-group">
+          <label for="rngUnitHP">Hit Points (HP): <span id="lblUnitHP">80</span></label>
+          <input type="range" id="rngUnitHP" min="40" max="150" value="80" />
+        </div>
+        <div class="ctrl-group">
+          <label for="rngUnitAtt">Attack: <span id="lblUnitAtt">8</span></label>
+          <input type="range" id="rngUnitAtt" min="2" max="15" value="8" />
+        </div>
+        <div class="ctrl-group">
+          <label for="rngUnitDef">Defense: <span id="lblUnitDef">4</span></label>
+          <input type="range" id="rngUnitDef" min="1" max="10" value="4" />
+        </div>
+        <div class="ctrl-group">
+          <label for="rngUnitMove">Move Speed: <span id="lblUnitMove">3</span></label>
+          <input type="range" id="rngUnitMove" min="1" max="5" value="3" />
+        </div>
+        <div class="ctrl-group">
+          <label for="rngUnitCost">Transform Cost: <span id="lblUnitCost">60 Mana</span></label>
+          <input type="range" id="rngUnitCost" min="20" max="100" step="5" value="60" />
+        </div>
+      </div>
+      <div style="display:flex; justify-content:flex-end; gap:12px; margin-top:8px;">
+        <button id="btnDeployGame" class="tb-btn primary" style="padding:10px 20px; font-size:14px; display:flex; align-items:center; gap:8px;">
+          🚀 Launch Game with this Playable Unit!
+        </button>
+      </div>
+    </div>
   </div>
 
   <script type="module" src="/sprite-lab.js"></script>
 </body>
 </html>
+

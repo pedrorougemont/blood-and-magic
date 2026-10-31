@@ -229,6 +229,10 @@ export class IndexedRenderer {
     return cels[idx];
   }
 
+  registerCustomAnim(animId, cels) {
+    this.animManifest[animId] = cels;
+  }
+
   // Draw a RES_ANIM cel (1-indexed celNum)
   drawCel(animId, celNum, x, y, options = {}) {
     const cels = this.animManifest[animId];
@@ -253,7 +257,8 @@ export class IndexedRenderer {
 
     const w = cel.w;
     const h = cel.h;
-    const srcBase = cel.binOff;
+    const srcBase = cel.binOff || 0;
+    const srcBytes = cel.pixels || this.animBytes;
 
     const minX = clip ? clip.x1 : 0;
     const minY = clip ? clip.y1 : 0;
@@ -268,10 +273,10 @@ export class IndexedRenderer {
     if (sxStart <= sxEnd && syStart <= syEnd) {
       for (let sy = syStart; sy <= syEnd; sy++) {
         let dstIdx = (drawY + sy) * SCREEN_W + (drawX + sxStart);
-        const rowBase = srcBase + sy * w;
+        const rowBase = cel.pixels ? sy * w : srcBase + sy * w;
         for (let sx = sxStart; sx <= sxEnd; sx++, dstIdx++) {
           const srcX = hFlip ? w - 1 - sx : sx;
-          let px = this.animBytes[rowBase + srcX];
+          let px = srcBytes[rowBase + srcX];
           if (skipTrans && px === CI_SKIP) continue;
           if (clutStart !== null && px >= CLUT_TEAM_COLORS && px < CLUT_TEAM_COLORS + CLUT_SIZE) {
             px = clutStart + (px - CLUT_TEAM_COLORS);

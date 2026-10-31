@@ -154,6 +154,7 @@ class BamGameApp {
     }
     this.renderer.setPalCycles(mapData.parsedConfig.palCycles || []);
     this.world.loadScenario(mapData);
+    this.initCustomUnit();
 
     const sub = document.getElementById('stageSubtitle');
     if (sub) {
@@ -161,6 +162,66 @@ class BamGameApp {
         Number(mapId) === 9110
           ? 'Storyline 1 (Aeldric): Doegan Keep vs. Undead Crypt'
           : 'Storyline 1 (Horath): Old Stone Keep vs. Barracks';
+    }
+  }
+
+  initCustomUnit() {
+    try {
+      const saved = localStorage.getItem('BAM_CUSTOM_UNIT');
+      if (!saved) return;
+      const data = JSON.parse(saved);
+      if (!data || !data.pixelsBase64) return;
+
+      const binStr = atob(data.pixelsBase64);
+      const rawBytes = new Uint8Array(binStr.length);
+      for (let i = 0; i < binStr.length; i++) {
+        rawBytes[i] = binStr.charCodeAt(i);
+      }
+
+      const customCel = {
+        orgX: data.orgX ?? Math.floor(data.w / 2),
+        orgY: data.orgY ?? Math.max(0, data.h - 2),
+        w: data.w,
+        h: data.h,
+        pri: 2000,
+        binOff: 0,
+        pixels: rawBytes,
+      };
+
+      // Register custom animations (IDs 9500..9535: Walk, Attack, Guard, Dies)
+      for (let offset = 0; offset <= 35; offset++) {
+        this.renderer.registerCustomAnim(9500 + offset, [customCel]);
+      }
+
+      const customGroup = {
+        typeId: UNIT_TYPE.CUSTOM,
+        internalName: data.name || 'CUSTOM CREATURE',
+        name: data.name || 'CUSTOM CREATURE',
+        rawName: 'CUSTOM',
+        baseMoveRate: Number(data.moveRate) || 3,
+        movement: 'W',
+        maxHP: Number(data.maxHP) || 80,
+        baseAttack: Number(data.attack) || 8,
+        baseDefense: Number(data.defense) || 4,
+        baseAttackRange: Number(data.range) || 1,
+        baseAnim: 9500,
+        portAnim: 2580,
+        skillRange: 1,
+        skillCost: 5,
+        transformCost: Number(data.cost) || 60,
+        transformTime: 6,
+        expRequired: 0,
+        expGained: 25,
+        researchTime: 6,
+      };
+
+      this.world.unitGroups.set(UNIT_TYPE.CUSTOM, customGroup);
+      this.world.researched[SIDE1].add(UNIT_TYPE.CUSTOM);
+      this.world.researched[SIDE2].add(UNIT_TYPE.CUSTOM);
+
+      this.world.addMessage(`CUSTOM UNIT ONLINE: ${customGroup.name}!`);
+    } catch (err) {
+      console.warn('Failed to load custom unit from storage:', err);
     }
   }
 
