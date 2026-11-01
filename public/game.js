@@ -87,6 +87,7 @@ class BamGameApp {
     this.keysDown = new Set();
     this.lastScrollTime = 0;
     this.lastSimTime = performance.now();
+    this.aspectRatio = localStorage.getItem('bam_aspect_ratio') || '4:3';
   }
 
   async init() {
@@ -566,6 +567,54 @@ class BamGameApp {
       if (mapSelect) mapSelect.value = String(nextMap);
       this.startScenario(nextMap);
     });
+
+    // Dynamic aspect-ratio and viewport resizing
+    const btnRatio = document.getElementById('btnRatio');
+    if (btnRatio) {
+      btnRatio.textContent = `Ratio: ${this.aspectRatio}`;
+      btnRatio.addEventListener('click', () => {
+        this.aspectRatio = this.aspectRatio === '4:3' ? '16:10' : '4:3';
+        localStorage.setItem('bam_aspect_ratio', this.aspectRatio);
+        btnRatio.textContent = `Ratio: ${this.aspectRatio}`;
+        this.fitCanvas();
+      });
+    }
+
+    window.addEventListener('resize', () => this.fitCanvas());
+    window.addEventListener('orientationchange', () => {
+      setTimeout(() => this.fitCanvas(), 80);
+      setTimeout(() => this.fitCanvas(), 250);
+    });
+
+    if (window.ResizeObserver) {
+      const ro = new ResizeObserver(() => this.fitCanvas());
+      const shell = document.querySelector('.viewport-shell');
+      if (shell) ro.observe(shell);
+    }
+
+    this.fitCanvas();
+  }
+
+  fitCanvas() {
+    const shell = document.querySelector('.viewport-shell');
+    const frame = document.getElementById('canvasFrame');
+    if (!shell || !frame) return;
+
+    const shellW = shell.clientWidth;
+    const shellH = shell.clientHeight;
+    if (shellW <= 0 || shellH <= 0) return;
+
+    const ratioVal = this.aspectRatio === '16:10' ? 1.6 : (4 / 3);
+    let w = shellW;
+    let h = w / ratioVal;
+
+    if (h > shellH) {
+      h = shellH;
+      w = h * ratioVal;
+    }
+
+    frame.style.width = `${Math.floor(w)}px`;
+    frame.style.height = `${Math.floor(h)}px`;
   }
 
   toggleFog() {

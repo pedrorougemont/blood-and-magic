@@ -16,15 +16,21 @@
   padding: 0;
 }
 
-body {
+html, body {
   background: radial-gradient(circle at center, #181c26 0%, #090a0f 100%);
   color: var(--text-main);
   font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  height: 100vh;
+  height: 100%;
+  height: 100dvh;
+  width: 100%;
+  width: 100dvw;
+  margin: 0;
+  padding: 0;
   display: flex;
   flex-direction: column;
   overflow: hidden;
   user-select: none;
+  -webkit-user-select: none;
 }
 
 .topbar {
@@ -135,23 +141,30 @@ select {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 12px;
+  padding: 10px;
   min-width: 0;
   min-height: 0;
+  overflow: hidden;
+  position: relative;
+  box-sizing: border-box;
 }
 
 .canvas-frame {
   position: relative;
-  height: 100%;
   aspect-ratio: 4 / 3;
-  max-height: calc(100vh - 74px);
+  width: 100%;
+  height: 100%;
   max-width: 100%;
+  max-height: 100%;
+  margin: auto;
   border: 2px solid var(--border-gold);
   box-shadow: 0 12px 40px rgba(0, 0, 0, 0.85);
   background: #000;
   display: flex;
   align-items: center;
   justify-content: center;
+  overflow: hidden;
+  flex-shrink: 0;
 }
 
 #bamCanvas {
@@ -208,4 +221,114 @@ select {
   display: flex;
   justify-content: center;
   gap: 10px;
+}
+
+/* Mobile Portrait & Small Screens (<= 768px) */
+@media (max-width: 768px) {
+  .topbar {
+    height: 42px;
+    padding: 0 8px;
+    gap: 8px;
+  }
+
+  .brand h1 {
+    font-size: 14px;
+  }
+
+  .brand-badge {
+    font-size: 9px;
+    padding: 1px 4px;
+  }
+
+  .subtitle {
+    display: none;
+  }
+
+  .toolbar {
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    gap: 4px;
+    padding-bottom: 2px;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  .toolbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .ctrl-label {
+    font-size: 11px;
+    gap: 4px;
+  }
+
+  select {
+    padding: 3px 6px;
+    font-size: 11px;
+    max-width: 120px;
+  }
+
+  .tb-btn {
+    padding: 4px 7px;
+    font-size: 11px;
+    white-space: nowrap;
+  }
+
+  .viewport-shell {
+    padding: 4px;
+  }
+}
+
+/* Mobile Landscape (height <= 520px) */
+@media (max-height: 520px) and (orientation: landscape) {
+  .topbar {
+    height: 32px;
+    padding: 0 8px;
+    gap: 6px;
+  }
+
+  .brand h1 {
+    font-size: 12px;
+  }
+
+  .brand-badge,
+  .subtitle {
+    display: none;
+  }
+
+  .toolbar {
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    gap: 4px;
+    scrollbar-width: none;
+  }
+
+  .toolbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .ctrl-label {
+    font-size: 10px;
+    gap: 2px;
+  }
+
+  select {
+    padding: 2px 4px;
+    font-size: 10px;
+    max-width: 110px;
+  }
+
+  .tb-btn {
+    padding: 2px 6px;
+    font-size: 10px;
+    white-space: nowrap;
+  }
+
+  .viewport-shell {
+    padding: 2px;
+  }
+
+  .canvas-frame {
+    border-width: 1px;
+  }
 }

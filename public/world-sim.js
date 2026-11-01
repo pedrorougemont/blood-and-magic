@@ -380,6 +380,7 @@ export class BamWorld {
         return FUNC.CRYPT;
       case UNIT_TYPE.WARRIOR:
       case UNIT_TYPE.RANGER:
+      case UNIT_TYPE.CRUSADER_RANGER:
       case UNIT_TYPE.PALADIN:
         return FUNC.BARRACKS;
       case UNIT_TYPE.DRUID:
