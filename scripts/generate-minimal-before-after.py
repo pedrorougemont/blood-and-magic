@@ -73,37 +73,14 @@ for y in range(10, h):
         if val in skin_map:
             last_arr[y, x] = skin_map[val]
 
-# 4. Sculpted Slender Arm on Viewer's Right (Rows 11 to 20)
-# Removes the bloated 4px bulge on x=13, trims arm to natural 2-3px width,
-# and applies anatomical cylindrical lighting (highlight down center, shadow on outer edge).
-# y=11: pauldron rim
-last_arr[11, 10] = 34;  last_arr[11, 11] = 38;  last_arr[11, 12] = 33;  last_arr[11, 13] = 254
-# y=12: pauldron lower cuff
-last_arr[12, 10] = 33;  last_arr[12, 11] = 37;  last_arr[12, 12] = 32;  last_arr[12, 13] = 254
-# y=13: forearm emergence
-last_arr[13, 10] = 120; last_arr[13, 11] = 170; last_arr[13, 12] = 171; last_arr[13, 13] = 254
-# y=14: forearm (blue bracelet removed -> natural brown skin)
-last_arr[14, 10] = 121; last_arr[14, 11] = 172; last_arr[14, 12] = 169; last_arr[14, 13] = 254
-# y=15: lower forearm (blue bracelet removed)
-last_arr[15, 10] = 121; last_arr[15, 11] = 171; last_arr[15, 12] = 120; last_arr[15, 13] = 254
-# y=16: slender wrist
-last_arr[16, 10] = 120; last_arr[16, 11] = 170; last_arr[16, 12] = 119; last_arr[16, 13] = 254
-# y=17: hand / knuckles
-last_arr[17, 10] = 121; last_arr[17, 11] = 172; last_arr[17, 12] = 170; last_arr[17, 13] = 254
-# y=18: fingers curling
-last_arr[18, 10] = 120; last_arr[18, 11] = 171; last_arr[18, 12] = 169; last_arr[18, 13] = 254
-# y=19: fingertips
-last_arr[19, 10] = 120; last_arr[19, 11] = 170; last_arr[19, 12] = 254; last_arr[19, 13] = 254
-# y=20: hand tip
-last_arr[20, 10] = 119; last_arr[20, 11] = 254; last_arr[20, 12] = 254; last_arr[20, 13] = 254
-
-# Left wrist wrap removal:
-last_arr[16, 0] = 169;  last_arr[17, 0] = 170;  last_arr[18, 0] = 169
-# Neutral leather belt with brass buckle
+# 4. Neutral leather belt with brass buckle
 last_arr[14, 3] = 17;   last_arr[14, 9] = 17
 last_arr[15, 4] = 18;   last_arr[15, 6] = 152;  last_arr[15, 8] = 18
 last_arr[16, 3] = 17;   last_arr[16, 5] = 18;   last_arr[16, 7] = 18
 last_arr[17, 4] = 18;   last_arr[17, 6] = 152
+
+# Note: The arms and bracers retain their authentic original silhouette and blue bracer pixels (193..198)
+# with the exposed skin naturally mapped to the brown skin ramp (169..172, 119..121).
 
 # 5. Blue Jeans
 last_arr[17, 3] = 83; last_arr[17, 8] = 84; last_arr[17, 9] = 85
@@ -159,7 +136,7 @@ draw.text((cx1 + 42, y_top + 325), "1x Native DOS Scale", fill=(110, 130, 160, 2
 
 # Key points
 draw.text((cx1 + 16, y_top + 355), "&bull; Blonde Hair & Blue Headband", fill=(130, 150, 180, 255), font=font)
-draw.text((cx1 + 16, y_top + 372), "&bull; Pale Skin, Green Armor, Blue Bracelet, Olive Pants", fill=(130, 150, 180, 255), font=font)
+draw.text((cx1 + 16, y_top + 372), "&bull; Pale Skin, Green Armor, Blue Bracers, Olive Pants", fill=(130, 150, 180, 255), font=font)
 
 # Column 2: LAST (FINAL CUSTOM)
 cx2 = cx1 + card_w + 32
@@ -176,7 +153,7 @@ draw.text((cx2 + 42, y_top + 325), "1x Native DOS Scale", fill=(110, 130, 160, 2
 
 # Key points
 draw.text((cx2 + 16, y_top + 355), "&bull; Crusader Great Helm (Steel & Brass Trim)", fill=(200, 220, 245, 255), font=font)
-draw.text((cx2 + 16, y_top + 372), "&bull; Brown Skin, Gray Armor, Blue Jeans, No Bracelet", fill=(200, 220, 245, 255), font=font)
+draw.text((cx2 + 16, y_top + 372), "&bull; Brown Skin, Gray Armor, Jeans & Bracers", fill=(200, 220, 245, 255), font=font)
 
 # Save Minimal Graphic
 comp_path = os.path.join(OUT_DIR, 'archer_before_after_minimal.png')
